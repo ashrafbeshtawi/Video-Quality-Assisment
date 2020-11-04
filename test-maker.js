@@ -1,26 +1,60 @@
 // the script should be included in the head
-// this script need bootstrab to be also included in the html file
 
 
-function add_video(parent_id,child_id,link,width,height) {
+//main script loader
+let tags =document.getElementsByClassName("vid");
+  //add bootstrab
+document.getElementsByTagName("head")[0].innerHTML+='<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">';
+for (let i = 0; i < tags.length; i++) {
+  let vid_id=tags[i].getAttribute("vid_id");
+  let link=tags[i].getAttribute("link");
+  let width=tags[i].getAttribute("width");
+  let height=tags[i].getAttribute("height");
+  //processing the poster
+  let poster=tags[i].getAttribute("poster")==null?"":"poster="+tags[i].getAttribute("poster");
+
+  
+  add_video(null,vid_id,link,width,height,poster,tags[0]);
+  
+}
+
+
+function add_video(parent_id,child_id,link,width,height,poster,pointer_parent) {
     // generate html5 code for video player
-    let video_text='<br><div id="container'+child_id+'"><video id="'+child_id+'" width="'+width+'" height="'+height+'" oldwidth="0" oldHeight="0"></video></div>';
+    let video_text='<br><div id="container'+child_id+'"><video  '+poster+' id="'+child_id+'" width="'+width+'" height="'+height+'" oldwidth="0" oldHeight="0"></video></div>';
     // add the video player
-    let video=add_to_element(parent_id,video_text,child_id,1,null);
+    let video=null;
+    if(pointer_parent==null){
+      video=add_to_element(parent_id,video_text,child_id,1,null);
+    }else{
+      video=add_to_element(null,video_text,child_id,1,pointer_parent);
+    }
+
     // generate html5 code for link
     let source='<source src="'+link+'" type="video/mp4">';
     // add the link of the video to th player
     add_to_element(null,source,"temp",1,video);
+    //add the begin of the table 
+    let table_id="table"+child_id;
+    let table='<table style="width:50%" class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%"><thead><tr id="'+table_id+'"></tr></thead></tbody></table>';
+    if(pointer_parent==null){
+      add_to_element(parent_id,table,table_id,1,null);
+    }else{
+      add_to_element(null,table,table_id,1,pointer_parent);
+    }
     //add play button
     let temp="'"+child_id+"'";
-    let play_button='<br><button  onclick="play('+temp+')">Play</button>';
-    add_to_element(parent_id,play_button,child_id+"play",1,null);
+    let play_button='<th scope="col"><div class="glyphicon glyphicon-play btn btn-info btn-lg" onclick="play('+temp+')">Play</div></th>';
+    add_to_element(table_id,play_button,child_id+"play",1,null);
+
     //add result
-    let result='<br><b id="'+child_id+'result" class="results">This video was not watched yet</p>';
-    add_to_element(parent_id,result,child_id+"reslt",1,null);
+    let result='<th scope="col"><b id="'+child_id+'result" class="results">State: Unwatched</p></th>';
+    add_to_element(table_id,result,child_id+"reslt",1,null);
+
     //add video quality question
-    let code='<label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality">     <option value="good">Good</option>     <option value="bad">Bad</option> </select>';
-    add_to_element(parent_id,code,child_id+"reslt",1,null);
+    let code='<th scope="col"><label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality">     <option value="good">Good</option>     <option value="bad">Bad</option> </select></th>';
+    add_to_element(table_id,code,child_id+"reslt",1,null);
+
     document.getElementById(child_id+"quality").disabled = true;
 
     //add listner to mange video result
@@ -150,7 +184,7 @@ function change_video_result(id,end_play) {
   let result=document.getElementById(id+"result");
   let option=document.getElementById(id+"quality");
   //set video as watched
-    result.innerHTML="Video watched :)";
+    result.innerHTML="State: watched 	&#10003;";
   // let user rate the video
     option.disabled=false;
     // exit fullscreen
