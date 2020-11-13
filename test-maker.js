@@ -34,7 +34,7 @@ function add_video(parent_id,child_id,link,width,height,poster,pointer_parent) {
     let source='<source src="'+link+'" type="video/mp4">';
     // add the link of the video to th player
     add_to_element(null,source,"temp",1,video);
-    //add the begin of the table 
+    //add the table 
     let table_id="table"+child_id;
     let table='<table style="width:50%" class="dcf-table dcf-table-responsive dcf-table-bordered dcf-table-striped dcf-w-100%"><thead><tr id="'+table_id+'"></tr></thead></tbody></table>';
     if(pointer_parent==null){
@@ -47,18 +47,27 @@ function add_video(parent_id,child_id,link,width,height,poster,pointer_parent) {
     let play_button='<th scope="col"><div class="glyphicon glyphicon-play btn btn-info btn-lg" onclick="play('+temp+')">Play</div></th>';
     add_to_element(table_id,play_button,child_id+"play",1,null);
 
+    //add video duration
+    my_element=document.getElementById(child_id);
+    //wait  for metadata to load
+    my_element.onloadedmetadata = function() {
+      let dauer=new Date(this.duration * 1000).toISOString().substr(11, 8)
+      let duration='<th scope="col"><b id="'+child_id+'duration" class="duration">Duration: '+dauer+'</p></th>';      
+      add_to_element(table_id,duration,child_id+"duration",1,null);
+    }
+
+
     //add result
     let result='<th scope="col"><b id="'+child_id+'result" class="results">State: Unwatched</p></th>';
     add_to_element(table_id,result,child_id+"reslt",1,null);
 
     //add video quality question
-    let code='<th scope="col"><label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality">     <option value="good">Good</option>     <option value="bad">Bad</option> </select></th>';
+    let code='<th scope="col"><label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality"> <option value="bad">Bad</option> <option value="poor">Poor</option> <option value="fair">Fair</option> <option value="good">Good</option> <option value="excellent">Excellent</option></select></th>';
     add_to_element(table_id,code,child_id+"reslt",1,null);
 
     document.getElementById(child_id+"quality").disabled = true;
 
-    //add listner to mange video result
-    //add_end_video_listner(child_id)
+
 
 
 
