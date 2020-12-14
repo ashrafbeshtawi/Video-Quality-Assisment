@@ -8,15 +8,36 @@
         
 
         <form>
-        <div poster="unnamed.png" class="vid" vid_id="test" link="http://techslides.com/demos/sample-videos/small.mp4" width="600" height="400"></div>
-        <div class="vid" vid_id="test2" link="sample.mp4" width="600" height="400"></div>
-        <button type="submit">fefwf</button>
+        <div poster="unnamed.png" callback=name class="vid" vid_id="test1" link="http://techslides.com/demos/sample-videos/small.mp4" width="600" height="400" ></div>
+        <div class="vid" vid_id="test2" callback=name link="sample.mp4" width="600" height="400" ></div>
+        <button class="btn btn-info btn-lg" id="send_button" type="submit" disabled=true>Send</button>
     </form>
         
         <script src="test-maker.js"></script>
         <script>
+            // this is a simple method to use the call back to check if all videos
+            // were watched so that submit button can be activated
+
+            // dictionary with the ids of all videos used in the task
+            let videos={"test1":false,"test2":false};
             
-            let url="http://techslides.com/demos/sample-videos/small.mp4"
+            //sample call back function
+            function name(id,url) {
+                //mark this video as watched
+                if(id in videos){
+                    videos[id]=true;
+                }
+                //check if all videos were watched -> then undisable the submit button
+                for (let key in videos) {
+                    if(videos[key]==false){
+                        return;
+                    }
+                document.getElementById("send_button").disabled=false;
+                }
+
+            }
+            
+
 
 
 

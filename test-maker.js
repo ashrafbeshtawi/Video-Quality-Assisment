@@ -10,16 +10,18 @@ for (let i = 0; i < tags.length; i++) {
   let link=tags[i].getAttribute("link");
   let width=tags[i].getAttribute("width");
   let height=tags[i].getAttribute("height");
+  let call_back=tags[i].getAttribute("callback");
   //processing the poster
   let poster=tags[i].getAttribute("poster")==null?"":"poster="+tags[i].getAttribute("poster");
 
-  
-  add_video(null,vid_id,link,width,height,poster,tags[0]);
+  //adding the video
+  add_video(null,vid_id,link,width,height,poster,call_back,tags[i]);
+
   
 }
 
 
-function add_video(parent_id,child_id,link,width,height,poster,pointer_parent) {
+function add_video(parent_id,child_id,link,width,height,poster,call_back,pointer_parent) {
     // generate html5 code for video player
     let video_text='<br><div id="container'+child_id+'"><video  '+poster+' id="'+child_id+'" width="'+width+'" height="'+height+'" oldwidth="0" oldHeight="0"></video></div>';
     // add the video player
@@ -44,16 +46,21 @@ function add_video(parent_id,child_id,link,width,height,poster,pointer_parent) {
     }
     //add play button
     let temp="'"+child_id+"'";
-    let play_button='<th scope="col"><div class="glyphicon glyphicon-play btn btn-info btn-lg" onclick="play('+temp+')">Play</div></th>';
+    let link_x="'"+link+"'";    
+    let play_button='<th scope="col"><div class="glyphicon glyphicon-play btn btn-info btn-lg" onclick="play('+temp+','+call_back+','+link_x+')">Play</div></th>';
     add_to_element(table_id,play_button,child_id+"play",1,null);
 
     //add video duration
     my_element=document.getElementById(child_id);
-    //wait  for metadata to load
+    //wait  for metadata to load then read duration and add it 
     my_element.onloadedmetadata = function() {
-      let dauer=new Date(this.duration * 1000).toISOString().substr(11, 8)
-      let duration='<th scope="col"><b id="'+child_id+'duration" class="duration">Duration: '+dauer+'</p></th>';      
-      add_to_element(table_id,duration,child_id+"duration",1,null);
+      // make duration has not previously added (this could happen because the video will be reloaded with each full screen mode interruption)
+      if (document.getElementById(child_id+"duration")==null) {
+        let dauer=new Date(this.duration * 1000).toISOString().substr(11, 8)
+        let duration='<th scope="col"><b id="'+child_id+'duration" class="duration">Duration: '+dauer+'</p></th>';      
+        add_to_element(table_id,duration,child_id+"duration",1,null);   
+      }
+
     }
 
 
@@ -64,6 +71,9 @@ function add_video(parent_id,child_id,link,width,height,poster,pointer_parent) {
     //add video quality question
     let code='<th scope="col"><label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality"> <option value="bad">Bad</option> <option value="poor">Poor</option> <option value="fair">Fair</option> <option value="good">Good</option> <option value="excellent">Excellent</option></select></th>';
     add_to_element(table_id,code,child_id+"reslt",1,null);
+    //add the link
+    let hidden='<input type="hidden" id="'+child_id+'hidden"  name="'+child_id+'hidden" value='+link_x+'>';
+    add_to_element(table_id,hidden,child_id+"hidden",1,null);
 
     document.getElementById(child_id+"quality").disabled = true;
 
@@ -101,7 +111,7 @@ function add_to_element(id,element,element_id,return_type,pointer) {
 }
 
 
-function play(id) {
+function play(id,call_back,link) {
     //select he video
     let video=document.getElementById(id);
     //select the parent
@@ -111,7 +121,7 @@ function play(id) {
     
     //function to handle if the video was finished
 
-    let end_play= function (e){ change_video_result(id,end_play) }
+    let end_play= function (e){ change_video_result(id,call_back,link,end_play) }
     video.addEventListener("ended", end_play);
     //start fullscreen mode & set eventlistner to halde if the fullscreen mode closed
     if (parent.requestFullscreen) {
@@ -186,12 +196,16 @@ function close_fullscreen(video){
 */
 
 
-function change_video_result(id,end_play) {
+function change_video_result(id,call_back,link,end_play) {
   console.log("change state of"+id);
   //select elements
   let video=document.getElementById(id);
   let result=document.getElementById(id+"result");
   let option=document.getElementById(id+"quality");
+  //call the call back function if not null
+  if(call_back!=null){
+    call_back(id,link);
+  }
   //set video as watched
     result.innerHTML="State: watched 	&#10003;";
   // let user rate the video
