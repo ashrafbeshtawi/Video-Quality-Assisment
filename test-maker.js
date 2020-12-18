@@ -6,16 +6,19 @@ let tags =document.getElementsByClassName("vid");
   //add bootstrab
 document.getElementsByTagName("head")[0].innerHTML+='<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">';
 for (let i = 0; i < tags.length; i++) {
-  let vid_id=tags[i].getAttribute("vid_id");
+  console.log(tags[i].getAttribute("id"))
+  let vid_id=tags[i].getAttribute("id")==null?makeid(6)+"_video":tags[i].getAttribute("id")+"_video"
+  //let vid_id=tags[i].getAttribute("vid_id");
   let link=tags[i].getAttribute("link");
   let width=tags[i].getAttribute("width");
   let height=tags[i].getAttribute("height");
   let call_back=tags[i].getAttribute("callback");
+  let parent_id=tags[i].getAttribute("id");
   //processing the poster
   let poster=tags[i].getAttribute("poster")==null?"":"poster="+tags[i].getAttribute("poster");
 
   //adding the video
-  add_video(null,vid_id,link,width,height,poster,call_back,tags[i]);
+  add_video(parent_id,vid_id,link,width,height,poster,call_back,tags[i]);
 
   
 }
@@ -23,7 +26,7 @@ for (let i = 0; i < tags.length; i++) {
 
 function add_video(parent_id,child_id,link,width,height,poster,call_back,pointer_parent) {
     // generate html5 code for video player
-    let video_text='<br><div id="container'+child_id+'"><video  '+poster+' id="'+child_id+'" width="'+width+'" height="'+height+'" oldwidth="0" oldHeight="0"></video></div>';
+    let video_text='<br><div id="container'+child_id+'"><video parent_id="'+parent_id+'"  '+poster+' id="'+child_id+'" width="'+width+'" height="'+height+'" oldwidth="0" oldHeight="0"></video></div>';
     // add the video player
     let video=null;
     if(pointer_parent==null){
@@ -69,13 +72,17 @@ function add_video(parent_id,child_id,link,width,height,poster,call_back,pointer
     add_to_element(table_id,result,child_id+"reslt",1,null);
 
     //add video quality question
-    let code='<th scope="col"><label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality"> <option value="bad">Bad</option> <option value="poor">Poor</option> <option value="fair">Fair</option> <option value="good">Good</option> <option value="excellent">Excellent</option></select></th>';
-    add_to_element(table_id,code,child_id+"reslt",1,null);
+    //let code='<th scope="col"><label > Rate the video quality:</label> <select id="'+child_id+'quality" name="'+child_id+'quality"> <option value="bad">Bad</option> <option value="poor">Poor</option> <option value="fair">Fair</option> <option value="good">Good</option> <option value="excellent">Excellent</option></select></th>';
+    //add_to_element(table_id,code,child_id+"reslt",1,null);
+
     //add the link
     let hidden='<input type="hidden" id="'+child_id+'hidden"  name="'+child_id+'hidden" value='+link_x+'>';
     add_to_element(table_id,hidden,child_id+"hidden",1,null);
 
-    document.getElementById(child_id+"quality").disabled = true;
+    let hidden_count_views='<input type="hidden" id="'+child_id+'count_views"  name="'+child_id+'hidden" value=0>';
+    add_to_element(table_id,hidden_count_views,child_id+"count_views",1,null);
+
+    //document.getElementById(child_id+"quality").disabled = true;
 
 
 
@@ -201,21 +208,38 @@ function change_video_result(id,call_back,link,end_play) {
   //select elements
   let video=document.getElementById(id);
   let result=document.getElementById(id+"result");
-  let option=document.getElementById(id+"quality");
+  let count_views=document.getElementById(id+"count_views");
+  //let option=document.getElementById(id+"quality");
   //call the call back function if not null
   if(call_back!=null){
-    call_back(id,link);
+    // get parent id
+    let parent_id=video.getAttribute("parent_id");
+    call_back(parent_id);
   }
   //set video as watched
     result.innerHTML="State: watched 	&#10003;";
+  //increment views by 1
+    let new_value=parseInt(count_views.getAttribute("value"))+1;
+    count_views.setAttribute("value",new_value);
   // let user rate the video
-    option.disabled=false;
+    //option.disabled=false;
+
     // exit fullscreen
     document.exitFullscreen();
     // remove the event listner
     video.removeEventListener("ended",end_play);
 }
 
+
+function makeid(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 /*
 function add_end_video_listner(id){
     

@@ -8,8 +8,8 @@
         
 
         <form>
-        <div poster="unnamed.png" callback=name class="vid" vid_id="test1" link="http://techslides.com/demos/sample-videos/small.mp4" width="600" height="400" ></div>
-        <div class="vid" vid_id="test2" callback=name link="sample.mp4" width="600" height="400" ></div>
+        <div poster="unnamed.png" id="mmm" callback=name class="vid"  link="http://techslides.com/demos/sample-videos/small.mp4" width="600" height="400" ></div>
+        <div class="vid" id="kkk" callback=name link="sample.mp4" width="600" height="400" ></div>
         <button class="btn btn-info btn-lg" id="send_button" type="submit" disabled=true>Send</button>
     </form>
         
@@ -19,10 +19,10 @@
             // were watched so that submit button can be activated
 
             // dictionary with the ids of all videos used in the task
-            let videos={"test1":false,"test2":false};
+            let videos={"mmm":false,"kkk":false};
             
             //sample call back function
-            function name(id,url) {
+            function name(id) {
                 //mark this video as watched
                 if(id in videos){
                     videos[id]=true;
@@ -32,8 +32,8 @@
                     if(videos[key]==false){
                         return;
                     }
-                document.getElementById("send_button").disabled=false;
                 }
+                document.getElementById("send_button").disabled=false;
 
             }
             
