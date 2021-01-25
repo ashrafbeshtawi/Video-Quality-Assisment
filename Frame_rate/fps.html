@@ -1,0 +1,61 @@
+<html>
+
+
+<body>
+
+
+<script>
+// start timestamp
+let start=null;
+// number of frames per second
+let count=0;
+// number of measuers to be done (5 per default)
+let tries_total=5
+let tries=0
+//fps results
+let fps=[]
+//average
+let avg=0;
+
+
+window.requestAnimationFrame(step);
+
+
+//function to be called when screen is ready to be refreshed
+function step(timestamp) {
+  //incerement the number of frames showen
+  count++;
+  // if this is the first call then set start to timestamp (given from the browser)
+  if (start === null)
+    start = timestamp;
+  // calculate time elapsed
+  const elapsed = timestamp - start;
+ // if still in the first second then request new frame else 
+  if (elapsed < 1000) { 
+    window.requestAnimationFrame(step);
+  }else{
+      //count new try as done
+      tries++;
+      //save result
+      fps.push(count)
+      //initial values for next try
+       start=null;
+       count=0;
+      // if max tries not reached start again else average the values from all trials
+      if(tries<tries_total){
+        window.requestAnimationFrame(step);
+      }else{
+          //average values
+          let sum = fps.reduce((a, b) => a + b, 0);
+          avg=sum/fps.length;
+      }
+  }
+}
+
+
+
+
+</script>
+</body>
+
+</html>
