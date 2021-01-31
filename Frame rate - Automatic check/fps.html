@@ -1,0 +1,24 @@
+<html>
+<head>
+
+</head>
+
+<body>
+
+<div id="fps"></div>
+
+
+<script src="fps.js"></script>
+<script >
+
+// calling the function
+getFPS(sampleCallBackFunction,1);
+
+//sample call back function to print the fps
+function sampleCallBackFunction(fps){
+   document.getElementById("fps").innerHTML="Your FPS is "+fps;
+}
+</script>
+</body>
+
+</html>
