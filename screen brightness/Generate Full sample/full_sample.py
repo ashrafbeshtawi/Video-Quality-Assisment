@@ -44,32 +44,33 @@ def generate_image(image_name,number,brightness):
   background_brightness=128
   ## total brightness of the text
   brightness_of_text=background_brightness+brightness
-  cv2.putText(image,str(number), (width//3+width//20,height//2), 0, 4, yuv_to_rgb(brightness_of_text,0,0),2)
+  cv2.putText(image,str(number), (width//3+width//20,height//2), 2, 4, yuv_to_rgb(brightness_of_text,0,0),2)
   ## save image
   cv2.imwrite(image_name, image)
 
 
 
 
+## list of all number used in the setup
+nums= ["024","093","135","156","246","282","286","289","340","359","401","468","534","591","626","628","680","802","815","913","962"]
 
 
-## this script should be called as following
-## python SNR.py videoname kernelsize output-filename
+##
+## this script should be called as following: python main.py height width steps
 print ('Argument List:', str(sys.argv))
 if(len(sys.argv)<4):
-  print("Error: 3 Arguments needed")
+  print("Error: 2 Arguments needed")
   print("this script should be called as following: python main.py height width steps")
   exit()
 
 
-## calculate step
-step=int(sys.argv[3])
+steps=int(sys.argv[3])
 ## inital brighness (which will be added to 128)
 brightness=128
 ## loop to generate images
-for i in range(int(sys.argv[3])):
-  number=randrange(100,999)
-  generate_image(str(i+1)+"_"+str(number)+".jpg",number,brightness)
+for i in range(steps):
+  for j in range(len(nums)):
+    generate_image(str(i+1)+"_"+nums[j]+".jpg",int(nums[j]),brightness)
   brightness=brightness//2
 
 
