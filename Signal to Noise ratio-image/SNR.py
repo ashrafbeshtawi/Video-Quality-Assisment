@@ -18,6 +18,7 @@ kerne_size=int(sys.argv[2])
 my_img = cv2.imread(image)
 
 
+SNR=kerne_size-1
 ## loop over all kernels
 for i in range(1,kerne_size):
     print("Generating image with kernel size: "+ str(i), end=" ")
@@ -26,7 +27,8 @@ for i in range(1,kerne_size):
     # blurring image
     img=cv2.filter2D(my_img,-1,kernel)
     # saving the image
-    cv2.imwrite("output/"+str(i)+".jpg",img)
+    cv2.imwrite("output/"+str(SNR)+".jpg",img)
+    SNR=SNR-1
     print("✅")
 
 cv2.destroyAllWindows()
