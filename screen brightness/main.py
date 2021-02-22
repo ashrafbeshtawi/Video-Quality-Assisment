@@ -20,6 +20,7 @@ def yuv_to_rgb( Y,  U,  V):
   return (B,G,R)
 
 
+
 ####
 
 def generate_image(image_name,number,brightness,background_brightness,target):
@@ -67,7 +68,7 @@ target=sys.argv[4]
 ## reading back ground image
 background=None
 if(sys.argv[3]=="black"):
-  background=0
+  background=15
 elif(sys.argv[3]=="gray"):
   background=128
 elif(sys.argv[3]=="white"):
