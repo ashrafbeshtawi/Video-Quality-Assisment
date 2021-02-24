@@ -9,7 +9,7 @@
 var config ={
     jndMaxQuestions:45, // maximum number of questions
     snrStart:1, // SNR-  worse quality
-    snrEnd :19, // SNR-  best quality
+    snrEnd :10, // SNR-  best quality
     finishIfReversalIs:2, // use 7 as recommended by Levit t , H. (1992).
     exportFileName:"export.csv",
     debug:true
@@ -181,8 +181,10 @@ function start(){
 
 
 function addJNDQuestion(n,snrLevel){
+	let height=280;
+	let width=400;
     pick_is_added = false ;
-	var tempelate='<fieldset id="fieldset_{0}"><label>{0}.&nbsp;Which Image has a better quality compared to the other one?</label><div class="row" style="margin-top:10px;"><div class="col-sm-4"><div align="center"><b>Sample A</b></div><div align="right">  <img src={1} height=250 width=300> </div></div><div class="col-sm-4"></div><div class="col-sm-4"><div align="center"><b>Sample B</b></div><div align="left"> <img src={2} height=250 width=300></div></div></div><div class="row"><div class="col-sm-4"></div><div class="col-sm-5"><div class="radio"><label><input type="radio" name="cmp{0}" required="" value="{3}">Quality of <b>Sample A</b> is better.</label></div><div class="radio"><label><input type="radio" name="cmp{0}" required="" value="-1">Difference is <b>not detectable</b>.</label></div><div class="radio"><label><input type="radio" name="cmp{0}" required="" value="{4}">Quality of <b>Sample B</b> is better.</label></div></div><div class="col-sm-3"></div></div><div class="row text-center" style="margin-top:20px">	<button type="button" class="btn btn-primary" id="bt{0}" onclick="submitAnsJnd({0},{3},{4});" >Next</button></div></fieldset>';
+	var tempelate='<fieldset id="fieldset_{0}"><label>{0}.&nbsp;Which Image has a better quality compared to the other one?</label><div class="row" style="margin-top:10px;"><div class="col-sm-4"><div align="center"><b>Sample A</b></div><div align="right">  <img src={1} height={5} width={6}> </div></div><div class="col-sm-3"></div><div class="col-sm-4"><div align="center"><b>Sample B</b></div><div align="left"> <img src={2} height={5} width={6}></div></div></div><div class="row"><div class="col-sm-4"></div><div class="col-sm-5"><div class="radio"><label><input type="radio" name="cmp{0}" required="" value="{3}">Quality of <b>Sample A</b> is better.</label></div><div class="radio"><label><input type="radio" name="cmp{0}" required="" value="-1">Difference is <b>not detectable</b>.</label></div><div class="radio"><label><input type="radio" name="cmp{0}" required="" value="{4}">Quality of <b>Sample B</b> is better.</label></div></div><div class="col-sm-3"></div></div><div class="row text-center" style="margin-top:20px">	<button type="button" class="btn btn-primary" id="bt{0}" onclick="submitAnsJnd({0},{3},{4});" >Next</button></div></fieldset>';
     a = snrLevel;
     b = config.snrEnd;
 
@@ -197,7 +199,7 @@ function addJNDQuestion(n,snrLevel){
 
 	f2=fileName.f(b);;
 
-	text=tempelate.f(n,f1,f2,a,b);
+	text=tempelate.f(n,f1,f2,a,b,height,width);
 	console.log(text);
 	console.log("Question "+n+", : A: "+a+", B: "+b);
 

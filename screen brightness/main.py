@@ -3,6 +3,7 @@ import numpy as np
 import os
 import sys
 from random import randrange
+import PILasOPENCV as ImageFont
 
 ###
 ### conversion according to https://www.vocal.com/video/rgb-and-yuv-color-space-conversion/
@@ -43,15 +44,18 @@ def generate_image(image_name,number,brightness,background_brightness,target):
   ## write text
   ## total brightness of the text
   brightness_of_text=background_brightness+brightness
-  cv2.putText(image,number, (width//3-width//30,height//2), 2, 4, yuv_to_rgb(brightness_of_text,0,0),2)
+  cv2.putText(image,number, (width//3-width//15,height//2+height//20), 3, 4, yuv_to_rgb(brightness_of_text,0,0),2)
   ## save image
   cv2.imwrite(target+"/"+image_name, image)
 
 
 
 
+
 ## list of all number used in the setup
 nums= ["024","093","135","156","246","282","286","289","340","359","401","468","534","591","626","628","680","802","815","913","962"]
+
+
 
 
 ##

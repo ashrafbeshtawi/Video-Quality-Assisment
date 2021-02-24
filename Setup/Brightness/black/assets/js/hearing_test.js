@@ -200,7 +200,7 @@ function addJNDQuestion(n,snrLevel){
 
     pick_is_added = false ;
     // 0: question Number, 1: image, 2: correct ans
-	var tempelate='<fieldset id="fieldset_{0}"><label>{0}.&nbsp;Look at the following image and enter the three numbers that you see.</label><div class="row" style="margin-top:10px;"> <div align="center">  <img  src="{1}" width="500" height="600"> </div> <div align="center"> <input type="text" id="num_{0}" name="num_{0}" required="" class="nospace" autocomplete="off"> </div> <div align="center" style="margin-top:20px"> 	<button type="button" class="btn btn-primary" id="bt{0}" onclick="submitAnsJnd({0},{2},\'{3}\');" >Next</button></div></div></fieldset>';
+	var tempelate='<fieldset id="fieldset_{0}"><label>{0}.&nbsp;Look at the following image and enter the three numbers that you see.</label><div class="row" style="margin-top:10px;"> <div align="center">  <img  src="{1}" width="500" height="500">  </div> <div align="center"> <br/> <input type="text" id="num_{0}" name="num_{0}" required="" class="nospace" autocomplete="off"> </div> <div align="center" style="margin-top:20px"> 	<button type="button" class="btn btn-primary" id="bt{0}" onclick="submitAnsJnd({0},{2},\'{3}\');" >Next</button></div></div></fieldset>';
 
     a = snrLevel;
     b = config.snrEnd;
@@ -238,6 +238,8 @@ function addJNDQuestion(n,snrLevel){
       }
     });
 
+	// move focus to the new textbox
+	document.getElementById("num_{0}".f(n)).focus();
 
 }
 
